@@ -1,22 +1,41 @@
 #pragma once 
 
-struct Solution {
+class Solution {
+    public:
+    int orderType;
+    int deliveryType;
+    int sMin;
+    int sDiff;
+
     bool simutated;
 
     float holdingCost;
     float shortageCost;
     float orderCost;
-
+    float totalCost;
     float inviability;
-
-    int orderType;
-    int deliveryType;
-    int sMin;
-    int sDiff;
 
     Solution(int, int, int, int);
     ~Solution();
 
     void simulate();
     void methamodel();
+}
+
+class Genetic {
+    private:
+    int pop_size;
+    float pop_std;
+    std::vector<Solution> population;   
+
+    public:
+    float best_sol;
+
+    Genetic();
+    ~Genetic();    
+
+    initial_pop(char*);
+    void run();
+    void generation_step();    
+    
 }
