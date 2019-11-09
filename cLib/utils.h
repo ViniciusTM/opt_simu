@@ -30,6 +30,7 @@ struct Node {
 class TabuList {
     private:
     Node *root;
+    void resursive_clear(Node*);
 
     public:
     int successes;
@@ -38,7 +39,7 @@ class TabuList {
     TabuList();
     ~TabuList();
 
-    void clear_tree(Node*);
+    void clear();
     Node* find(Params);
     void add(Params);
     // bool find_and_add(Solution s);

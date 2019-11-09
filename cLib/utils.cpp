@@ -14,13 +14,17 @@ TabuList::TabuList() {
 }
 
 TabuList::~TabuList() {
-    clear_tree(root);
+    clear();
 }
 
-void TabuList::clear_tree(Node *node) {
+void TabuList::clear() {
+    resursive_clear(root);
+}
+
+void TabuList::resursive_clear(Node *node) {
     if (node != NULL) {
         for (Node* n : node->children) {
-            clear_tree(n);
+            resursive_clear(n);
         }
         delete node;
     }
@@ -86,39 +90,4 @@ void TabuList::add(Params params) {
 
     length += 1;
 }
-
-// bool TabuList::find_and_add(Solution s) {
-//     Node *current;
-
-//     current = root;
-//     for (int i : s.config) {
-//         bool stop = true;
-
-//         if (i == -1) {
-//             if (current->children[0]) {
-//                 current = current->children[0];
-//                 stop = false;
-//             }
-//         }
-//         else {
-//             if (current->children[i]) {
-//                 current = current->children[i];
-//                 stop = false;
-//             }
-//         }
-
-//         if (stop) {
-//             this->add(s);
-//             return false;
-//         }
-//     }
-
-//     if (current->depth > s.steps.size()) {
-//         current->depth = s.steps.size();
-//         return false;
-//     }
-//     else {
-//         return true;
-//     }    
-// }
 

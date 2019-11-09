@@ -7,7 +7,13 @@ const int SIMU_TIME = 100;
 
 // ------------- Solution ------------- //
 class Solution {
+    private:
+    void metamodel();
+
     public:
+    static TabuList tabu;
+    static int totalSimuNumber;
+
     int sMin;
     int sDiff;
     int orderType;
@@ -23,9 +29,8 @@ class Solution {
 
     Solution(int, int, int, int);
 
-    Params get_params();
-    void metamodel();
-    bool simulate(TabuList);
+    Params get_params();    
+    void simulate();
 };
 
 
@@ -33,7 +38,6 @@ class Solution {
 class Genetic {
     private:    
     int genNumber;
-    TabuList tabu;
     
     std::vector<Solution> population;
     int popSize;
