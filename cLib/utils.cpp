@@ -19,6 +19,8 @@ TabuList::~TabuList() {
 
 void TabuList::clear() {
     resursive_clear(root);
+    successes = 0;
+    length = 0;
 }
 
 void TabuList::resursive_clear(Node *node) {
