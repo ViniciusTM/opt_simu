@@ -1,81 +1,124 @@
-// Tabu List
-// TODO: Adaptar para uma TabuList de soluções simuladas
+#include "utils.h"
 
-Node::Node() {
-  left = NULL;
-  right = NULL;
+// ------------- Tabu List ------------- //
+Node::Node(int n) {
+    for (int i=0; i<n; i++) {
+        children.push_back(NULL);
+    }
 }
 
-BinaryTree::BinaryTree() {
-  root = new Node;
-  size = 0;
+TabuList::TabuList() {
+    root = new Node(201);
+    length = 0;
+    successes = 0;
 }
 
-BinaryTree::~BinaryTree() {
-  clear_tree(root);
+TabuList::~TabuList() {
+    clear_tree(root);
 }
 
-void BinaryTree::clear_tree(Node *node) {
-  if (node != NULL) {
-    clear_tree(node->left);
-    clear_tree(node->right);
-    delete node;
-  }
+void TabuList::clear_tree(Node *node) {
+    if (node != NULL) {
+        for (Node* n : node->children) {
+            clear_tree(n);
+        }
+        delete node;
+    }
 }
 
-bool BinaryTree::find(std::vector<bool> sol) {
-  Node *current;
+Node* TabuList::find(Params params) {
+    Node *current;
 
-  current = root;
-  for (bool k : sol) {
-    if (k && current->right) {
-      //std::cout << current->right << std::endl;
-      current = current->right;
-      continue;
+    current = root;
+    if (!current->children[params.s - 50]) {
+        return NULL;
     }
 
-    if (!k && current->left) {
-      //std::cout << current->left << std::endl;
-      current = current->left;
-      continue;
+    current = current->children[params.s -50];
+    if (!current->children[params.d - 10]) {
+        return NULL;
     }
-    return false;
-  }
 
-  return true;
+    current = current->children[params.d -10];
+    if (!current->children[params.o - 1]) {
+        return NULL;
+    }
+
+    current = current->children[params.o -1];
+    if (!current->children[params.l - 1]) {
+        return NULL;
+    }
+    
+    current = current->children[params.l - 1];
+    successes += 1;
+    return current;
 }
 
-void BinaryTree::add(std::vector<bool> sol) {
-  int i = 0;
-  int size = sol.size();
-  Node *current;
+void TabuList::add(Params params) {
+    Node *current;
 
-  size++;
-
-  current = root;
-  while (current) {
-    if (sol[i] && current->right) {
-      current = current->right;
-      i++;
-      continue;
-    }
-    if (!sol[i] && current->left){
-      current = current->left;
-      i++;
-      continue;
+    current = root;
+    if (!current->children[params.s - 50]) {
+        current->children[params.s - 50] = new Node(101);
     }
 
-    break;
-  }
+    current = current->children[params.s -50];
+    if (!current->children[params.d - 10]) {
+        current->children[params.d - 10] = new Node(10);
+    }
 
-  for (int k=i; k<size; k++) {
-    if (sol[k]) {
-      current->right = new Node;
-      current = current->right;
+    current = current->children[params.d -10];
+    if (!current->children[params.o - 1]) {
+        current->children[params.o - 1] = new Node(10);
     }
-    else {
-      current->left = new Node;
-      current = current->left;
+
+    current = current->children[params.o -1];
+    if (!current->children[params.l - 1]) {
+        current->children[params.l - 1] = new Node(0);
     }
-  }
+
+    current = current->children[params.l - 1];
+    current->holdingCost = params.hc;
+    current->shortageCost = params.sc;
+    current->orderCost = params.oc;
+    current->totalCost = params.oc + params.sc + params.hc;
+    current->inviability = params.inv;
+
+    length += 1;
 }
+
+// bool TabuList::find_and_add(Solution s) {
+//     Node *current;
+
+//     current = root;
+//     for (int i : s.config) {
+//         bool stop = true;
+
+//         if (i == -1) {
+//             if (current->children[0]) {
+//                 current = current->children[0];
+//                 stop = false;
+//             }
+//         }
+//         else {
+//             if (current->children[i]) {
+//                 current = current->children[i];
+//                 stop = false;
+//             }
+//         }
+
+//         if (stop) {
+//             this->add(s);
+//             return false;
+//         }
+//     }
+
+//     if (current->depth > s.steps.size()) {
+//         current->depth = s.steps.size();
+//         return false;
+//     }
+//     else {
+//         return true;
+//     }    
+// }
+

@@ -1,21 +1,45 @@
-// Tabu List
-// TODO: Adaptar para uma TabuList de soluções simuladas
+#pragma once 
 
-struct Node {
-  Node *left;
-  Node *right;
+#include <vector>
 
-  Node();
+//------------ Params ------------//
+struct Params {
+    int s;
+    int d;
+    int o;
+    int l;
+
+    float hc;
+    float sc;
+    float oc;
+    float inv;
 };
 
-struct BinaryTree {
-  Node *root;
-  int size;
+// ------------- Tabu List ------------- //
+struct Node {
+    std::vector<Node*> children;
+    float holdingCost;
+    float shortageCost;
+    float orderCost;
+    float totalCost;
+    float inviability;
 
-  BinaryTree();
-  ~BinaryTree();
+    Node(int);
+};
 
-  void clear_tree(Node*);
-  bool find(std::vector<bool>);
-  void add(std::vector<bool>);
+class TabuList {
+    private:
+    Node *root;
+
+    public:
+    int successes;
+    int length;
+
+    TabuList();
+    ~TabuList();
+
+    void clear_tree(Node*);
+    Node* find(Params);
+    void add(Params);
+    // bool find_and_add(Solution s);
 };

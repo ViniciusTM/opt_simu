@@ -1,13 +1,19 @@
 #pragma once 
 
+#include <vector>
+#include "utils.h"
+
+const int SIMU_TIME = 100;
+
+// ------------- Solution ------------- //
 class Solution {
     public:
-    int orderType;
-    int deliveryType;
     int sMin;
     int sDiff;
+    int orderType;
+    int deliveryType;
 
-    bool simutated;
+    bool simulated;
 
     float holdingCost;
     float shortageCost;
@@ -16,27 +22,34 @@ class Solution {
     float inviability;
 
     Solution(int, int, int, int);
-    ~Solution();
 
-    void simulate();
-    void methamodel();
-}
+    Params get_params();
+    void metamodel();
+    bool simulate(TabuList);
+};
 
+
+// ------------- Genetic ------------- //
 class Genetic {
-    private:
-    int pop_size;
-    float pop_std;
-    std::vector<Solution> population;   
+    private:    
+    int genNumber;
+    TabuList tabu;
+    
+    std::vector<Solution> population;
+    int popSize;
+    float popStd;
+
+    int simuNumber;
+    int totalSimuNumber;
 
     public:
-    float best_sol;
+    float bestSol;
 
-    Genetic();
-    ~Genetic();    
+    Genetic();  
 
     void initial_pop(const char*);
     void run();
     void generation_step();
     void calc_std(); 
     
-}
+};
