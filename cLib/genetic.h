@@ -34,8 +34,9 @@ class Genetic {
     Genetic();
     ~Genetic();    
 
-    initial_pop(char*);
+    void initial_pop(const char*);
     void run();
-    void generation_step();    
+    void generation_step();
+    void calc_std(); 
     
 }

@@ -2,6 +2,9 @@
 #include "genetic.h"
 
 //----------- Solution -----------//
+Solution::Solution(int s, int d, int o, int l) {
+    
+}
 
 //------------ Genetic ------------//
 void Genetic::run() {
