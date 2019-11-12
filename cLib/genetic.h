@@ -43,11 +43,8 @@ class Genetic {
     int popSize;
     float popStd;
 
-    int simuNumber;
-    int totalSimuNumber;
-
     public:
-    float bestSol;
+    Params bestSol;
 
     Genetic();  
 

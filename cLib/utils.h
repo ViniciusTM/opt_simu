@@ -4,20 +4,21 @@
 
 //------------ Params ------------//
 struct Params {
-    int s;
-    int d;
-    int o;
-    int l;
+    int s;      // estoque minimo
+    int d;      // diferenca de estoque min e max
+    int o;      // tipo de ordem 
+    int l;      // tipo de entrega
 
-    float hc;
-    float sc;
-    float oc;
-    float inv;
+    float hc;   // custo de estoque
+    float sc;   // custo de ruptura
+    float oc;   // custo de pedido
+    float inv;  // inviabilidade
 };
 
 // ------------- Tabu List ------------- //
 struct Node {
     std::vector<Node*> children;
+
     float holdingCost;
     float shortageCost;
     float orderCost;
@@ -42,5 +43,4 @@ class TabuList {
     void clear();
     Node* find(Params);
     void add(Params);
-    // bool find_and_add(Solution s);
 };
