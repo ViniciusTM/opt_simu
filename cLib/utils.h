@@ -12,6 +12,7 @@ struct Params {
     float hc;   // custo de estoque
     float sc;   // custo de ruptura
     float oc;   // custo de pedido
+    float ct;   // custo total
     float inv;  // inviabilidade
 };
 

@@ -1,4 +1,4 @@
-#pragma once 
+#pragma once
 
 #include <vector>
 #include "utils.h"
@@ -6,7 +6,8 @@
 const int SIMU_TIME = 100;
 
 // ------------- Solution ------------- //
-class Solution {
+class Solution 
+{
     private:
     void metamodel();
 
@@ -29,16 +30,17 @@ class Solution {
 
     Solution(int, int, int, int);
 
-    Params get_params();    
+    Params get_params();
     void simulate();
 };
 
 
 // ------------- Genetic ------------- //
-class Genetic {
-    private:    
+class Genetic 
+{
+    private:
     int genNumber;
-    
+
     std::vector<Solution> population;
     int popSize;
     float popStd;
@@ -46,11 +48,10 @@ class Genetic {
     public:
     Params bestSol;
 
-    Genetic();  
+    Genetic();
 
     void initial_pop(const char*);
     void run();
     void generation_step();
-    void calc_std(); 
-    
+    void calc_std();
 };
