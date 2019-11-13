@@ -116,3 +116,9 @@ void Genetic::run()
 void Genetic::generation_step()
 {
 }
+
+// Calcula a variabilidade da populacao
+void Genetic::calc_std()
+{
+
+}
