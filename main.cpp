@@ -1,6 +1,6 @@
 #include <iostream>
-#include "cLib/Uteis.h"
+#include "cLib/utils.h"
 
-int main(int argc, char* argv[]) {
-
+int main(int argc, char *argv[])
+{
 }

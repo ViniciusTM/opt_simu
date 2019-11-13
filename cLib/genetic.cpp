@@ -3,20 +3,23 @@
 #include <fstream>
 #include "genetic.h"
 
+using namespace std;
 
 //----------- Solution -----------//
-TabuList Solution::tabu;                // Lista Tabu como variavel de classe da solucao (evitar passa ela como parametro)
-int Solution::totalSimuNumber = 0;      // Conta o numer de simulacoes que tiveram que ser feitas
+TabuList Solution::tabu;           // Lista Tabu como variavel de classe da solucao (evitar passa ela como parametro)
+int Solution::totalSimuNumber = 0; // Conta o numer de simulacoes que tiveram que ser feitas
 
 // Inicializa parametros e ja calcula FO estimada ou pela tabu list
-Solution::Solution(int s, int d, int o, int l) {
+Solution::Solution(int s, int d, int o, int l)
+{
     sMin = s;
     sDiff = d;
     orderType = o;
     deliveryType = l;
 
-    Node* node = tabu.find(get_params());
-    if (node) {
+    Node *node = tabu.find(get_params());
+    if (node)
+    {
         holdingCost = node->holdingCost;
         shortageCost = node->shortageCost;
         orderCost = node->orderCost;
@@ -24,14 +27,16 @@ Solution::Solution(int s, int d, int o, int l) {
         inviability = node->inviability;
         simulated = true;
     }
-    else {
+    else
+    {
         metamodel();
         simulated = false;
     }
 }
 
 // Retorna a struct Params que tem informações basicas da solução para guardar na tabulist
-Params Solution::get_params() {
+Params Solution::get_params()
+{
     Params params;
 
     params.s = sMin;
@@ -48,17 +53,19 @@ Params Solution::get_params() {
 }
 
 // Calcula resultados com metamodelo
-void Solution::metamodel() {
-    holdingCost = 1 + 1*sMin + 1*sDiff + 1*orderType + 1*deliveryType;
-    shortageCost = 1 + 1*sMin + 1*sDiff + 1*orderType + 1*deliveryType;
-    orderCost = 1 + 1*sMin + 1*sDiff + 1*orderType + 1*deliveryType;
+void Solution::metamodel()
+{
+    holdingCost = 1 + 1 * sMin + 1 * sDiff + 1 * orderType + 1 * deliveryType;
+    shortageCost = 1 + 1 * sMin + 1 * sDiff + 1 * orderType + 1 * deliveryType;
+    orderCost = 1 + 1 * sMin + 1 * sDiff + 1 * orderType + 1 * deliveryType;
 
     totalCost = holdingCost + shortageCost + orderCost;
     inviability = (std::max(0.0f, shortageCost - 30) + std::max(0.0f, holdingCost - 100)) / 2;
 }
 
 // Simula solucao
-void Solution::simulate() {
+void Solution::simulate()
+{
     simulated = true;
 
     // ======= simulação =======
@@ -69,24 +76,21 @@ void Solution::simulate() {
     tabu.add(get_params());
 }
 
-
 //------------ Genetic ------------//
 
 // Por enquanto so reseta variaveis de classe da solucao
-Genetic::Genetic() {
+Genetic::Genetic()
+{
     Solution::totalSimuNumber = 0;
     Solution::tabu.clear();
 }
 
-void initial_pop(const char* fileName) {
-    instream file;
-    file.open (fileName);
-    int len << file;
-    for(int i=0; i<len; i++) {
-        int s << file;
-        int d << file;
-        int o << file;
-        int l << file;
+void Genetic::initial_pop(const char *fileName)
+{
+    ifstream file(fileName);
+    int s, d, o, l;
+    while (file >> s >> d >> o >> l)
+    {
         Solution sol(s, d, o, l);
         population.push_back(sol);
     }
@@ -94,8 +98,10 @@ void initial_pop(const char* fileName) {
 }
 
 // Roda geracao e loga resultados
-void Genetic::run() {
-    while(true) {
+void Genetic::run()
+{
+    while (true)
+    {
         int simuNum = Solution::totalSimuNumber;
         std::cout << "=======================================" << std::endl;
         std::cout << "-----> Generation: " << genNumber << std::endl;
@@ -108,5 +114,6 @@ void Genetic::run() {
 }
 
 // E equi que a magica acontece
-void Genetic::generation_step() {
+void Genetic::generation_step()
+{
 }
