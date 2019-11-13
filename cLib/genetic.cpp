@@ -1,5 +1,6 @@
 #include <algorithm>
 #include <iostream>
+#include <fstream>
 #include "genetic.h"
 
 
@@ -21,7 +22,7 @@ Solution::Solution(int s, int d, int o, int l) {
         orderCost = node->orderCost;
         totalCost = node->totalCost;
         inviability = node->inviability;
-        simulated = true;         
+        simulated = true;
     }
     else {
         metamodel();
@@ -51,9 +52,9 @@ void Solution::metamodel() {
     holdingCost = 1 + 1*sMin + 1*sDiff + 1*orderType + 1*deliveryType;
     shortageCost = 1 + 1*sMin + 1*sDiff + 1*orderType + 1*deliveryType;
     orderCost = 1 + 1*sMin + 1*sDiff + 1*orderType + 1*deliveryType;
-    
+
     totalCost = holdingCost + shortageCost + orderCost;
-    inviability = (std::max(0.0f, shortageCost - 30) + std::max(0.0f, holdingCost - 100)) / 2; 
+    inviability = (std::max(0.0f, shortageCost - 30) + std::max(0.0f, holdingCost - 100)) / 2;
 }
 
 // Simula solucao
@@ -63,9 +64,9 @@ void Solution::simulate() {
     // ======= simulação =======
     metamodel();
     // =========================
-    
+
     totalSimuNumber++;
-    tabu.add(get_params()); 
+    tabu.add(get_params());
 }
 
 
@@ -75,6 +76,21 @@ void Solution::simulate() {
 Genetic::Genetic() {
     Solution::totalSimuNumber = 0;
     Solution::tabu.clear();
+}
+
+void initial_pop(const char* fileName) {
+    instream file;
+    file.open (fileName);
+    int len << file;
+    for(int i=0; i<len; i++) {
+        int s << file;
+        int d << file;
+        int o << file;
+        int l << file;
+        Solution sol(s, d, o, l);
+        population.push_back(sol);
+    }
+    file.close();
 }
 
 // Roda geracao e loga resultados

@@ -1,4 +1,4 @@
-#pragma once 
+#pragma once
 
 #include <vector>
 #include "utils.h"
@@ -29,16 +29,16 @@ class Solution {
 
     Solution(int, int, int, int);
 
-    Params get_params();    
+    Params get_params();
     void simulate();
 };
 
 
 // ------------- Genetic ------------- //
 class Genetic {
-    private:    
+    private:
     int genNumber;
-    
+
     std::vector<Solution> population;
     int popSize;
     float popStd;
@@ -46,11 +46,11 @@ class Genetic {
     public:
     Params bestSol;
 
-    Genetic();  
+    Genetic();
 
     void initial_pop(const char*);
     void run();
     void generation_step();
-    void calc_std(); 
-    
+    void calc_std();
+
 };
