@@ -2,6 +2,8 @@
 #include <iostream>
 #include "genetic.h"
 
+float ALPHA = 0.0;
+
 
 //----------- Solution -----------//
 TabuList Solution::tabu;                // Lista Tabu como variavel de classe da solucao (evitar passa ela como parametro)
@@ -52,8 +54,8 @@ void Solution::metamodel() {
     shortageCost = 1 + 1*sMin + 1*sDiff + 1*orderType + 1*deliveryType;
     orderCost = 1 + 1*sMin + 1*sDiff + 1*orderType + 1*deliveryType;
     
-    totalCost = holdingCost + shortageCost + orderCost;
-    inviability = (std::max(0.0f, shortageCost - 30) + std::max(0.0f, holdingCost - 100)) / 2; 
+    inviability = (std::max(0.0f, shortageCost - 30) + std::max(0.0f, holdingCost - 100)); 
+    totalCost = ALPHA*inviability + holdingCost + shortageCost + orderCost;
 }
 
 // Simula solucao
