@@ -6,7 +6,7 @@
 const int SIMU_TIME = 100;
 
 // ------------- Solution ------------- //
-class Solution 
+class Solution
 {
     private:
     void metamodel();
@@ -22,11 +22,11 @@ class Solution
 
     bool simulated;
 
-    float holdingCost;
-    float shortageCost;
-    float orderCost;
-    float totalCost;
-    float inviability;
+    double holdingCost;
+    double shortageCost;
+    double orderCost;
+    double totalCost;
+    double inviability;
 
     Solution(int, int, int, int);
 
@@ -36,19 +36,21 @@ class Solution
 
 
 // ------------- Genetic ------------- //
-class Genetic 
+class Genetic
 {
     private:
     int genNumber;
+    double elapsed;
+
+    HiperParams hp;
 
     std::vector<Solution> population;
-    int popSize;
-    float popStd;
+    double popStd;
 
     public:
     Params bestSol;
 
-    Genetic();
+    Genetic(const char*, HiperParams = HiperParams());
 
     void initial_pop(const char*);
     void run();

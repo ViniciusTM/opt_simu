@@ -1,5 +1,13 @@
 #include "utils.h"
 
+// ------------- HiperParams ------------- //
+HiperParams::HiperParams(double st, int it, double tt)
+{
+    stdTreshold = st;
+    itTreshold = it;
+    timeTreshold = tt;    
+}
+
 // ------------- Tabu List ------------- //
 Node::Node(int n) {
     for (int i=0; i<n; i++) {
@@ -54,7 +62,7 @@ Node* TabuList::find(Params params) {
     if (!current->children[params.l - 1]) {
         return NULL;
     }
-    
+
     current = current->children[params.l - 1];
     successes += 1;
     return current;
@@ -92,4 +100,3 @@ void TabuList::add(Params params) {
 
     length += 1;
 }
-
