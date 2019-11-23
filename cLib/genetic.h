@@ -56,4 +56,8 @@ class Genetic
     void run();
     void generation_step();
     void calc_std();
+    bool x1(Solution&, Solution&);
+    std::vector<Solution> tournament();
+    void reproduction();
+    void armagedon();
 };
