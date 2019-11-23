@@ -1,12 +1,13 @@
 #include "utils.h"
 
 // ------------- HiperParams ------------- //
-HiperParams::HiperParams(double st, int it, double tt, double slt)
+HiperParams::HiperParams(double st, int it, double tt, double slt, double el)
 {
     stdTreshold = st;
     itTreshold = it;
     timeTreshold = tt;
     slackTreshold = slt;
+    elitism = el;
 }
 
 // ------------- Tabu List ------------- //

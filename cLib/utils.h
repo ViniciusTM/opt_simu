@@ -29,8 +29,9 @@ struct HiperParams
     int itTreshold;
     double timeTreshold;
     double slackTreshold;
+    double elitism;
 
-    HiperParams(double = D_INF, int = -I_INF, double = 3, double = 5);
+    HiperParams(double = D_INF, int = -I_INF, double = 3, double = 5, double = 0.1);
 };
 
 // ------------- Tabu List ------------- //
