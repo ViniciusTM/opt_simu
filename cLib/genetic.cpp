@@ -53,6 +53,16 @@ Params Solution::get_params()
     return params;
 }
 
+void Solution::report()
+{
+    std::cout << sMin << " " <<;
+    std::cout << sDiff << " " <<;
+    std::cout << orderType << " " <<;
+    std::cout << deliveryType << " " <<;
+    std::cout << totalCost << " " <<;
+    std::cout << inviability << std::endl;
+}
+
 // Calcula resultados com metamodelo
 void Solution::metamodel()
 {
@@ -106,18 +116,21 @@ void Genetic::initial_pop(const char *fileName)
 void Genetic::run()
 {
     auto start = std::chrono::high_resolution_clock::now();
+    elapsedGer = start;
     while (popStd > hp.stdTreshold || genNumber < hp.itTreshold || elapsed < hp.timeTreshold)
     {
         int simuNum = Solution::totalSimuNumber;
         std::cout << "=======================================" << std::endl;
         std::cout << "-----> Generation: " << genNumber << std::endl;
         generation_step();
-        std::cout << "Best solution:" << bestSol.ct << std::endl;
-        std::cout << "Num simulations (gen):" << Solution::totalSimuNumber - simuNum << std::endl;
-        std::cout << "Num simutaions (total):" << Solution::totalSimuNumber << std::endl;
-        std::cout << "Population std:" << popStd << std::endl;
+        //std::cout << "Best solution:" << bestSol.ct << std::endl;
+        //std::cout << "Num simulations (gen):" << Solution::totalSimuNumber - simuNum << std::endl;
+        //std::cout << "Num simutaions (total):" << Solution::totalSimuNumber << std::endl;
+        //std::cout << "Population std:" << popStd << std::endl;
         std::chrono::duration<double> duration = std::chrono::high_resolution_clock::now() - start;
         elapsed = duration.count();
+        //CHAMAR FUNCAO PRINT AQUI
+        elapsedGer = elapsed;
         std::cout << "Valores: " << popStd << " " << genNumber << " " << elapsed << std::endl;
     }
 }
@@ -131,5 +144,55 @@ void Genetic::generation_step()
 // Calcula a variabilidade da populacao
 void Genetic::calc_std()
 {
+    popStd = 0.0;
+    double soma = 0.0;
 
+    for(int i=0; i<hp.popSize; i++)
+    {
+        soma += solution[i].totalCost;
+    }
+
+    double average = soma/(hp.popSize-1);
+
+    for(int i=0; i<hp.popSize; i++)
+    {
+        soma += pow(solution[i].totalCost - average;2);
+    }
+
+    popStd = sqrt(soma);
+}
+
+// Calcula a quantidade de configuracoes viaveis
+void Genetic::calc_viability()
+{
+    viability = 0;
+    for(int i=0; i<hp.popSize; i++)
+    {
+        if(!population[i].inviability)
+        {
+            viability++;
+        }
+    }
+}
+
+void Genetic::report()
+{
+    std::ofstream file;
+    file.open("report.csv", std::ios::app); // escrever na ultima linha
+
+    if (file.is_open())
+    {
+        std::cout << "Arquivo de texto aberto com sucesso!" << std::endl;
+        file << Solution::tabu.length << ";" <<; //numero simulacoes
+        file << elapsed - elapsedGer << ";" <<; //tempo decorrido
+        file << bestSol.hc << ";" <<; //holdingCost
+        file << bestSol.sc << ";" <<; //shortageCost
+        file << bestSol.oc << ";" <<; //orderCost
+        file << popStd << ";" <<; //desvio padrao populacao
+        file << viability << std::endl; // quantidade de configs viaveis
+    }
+    else
+        std::cout << "Erro ao abrir arquivo de texto.";
+
+    file.close();
 }

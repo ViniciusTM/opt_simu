@@ -31,6 +31,7 @@ class Solution
     Solution(int, int, int, int);
 
     Params get_params();
+    void report();
     void simulate();
 };
 
@@ -40,12 +41,14 @@ class Genetic
 {
     private:
     int genNumber;
+
     double elapsed;
 
     HiperParams hp;
 
     std::vector<Solution> population;
     double popStd;
+    int viability;
 
     public:
     Params bestSol;
@@ -56,4 +59,5 @@ class Genetic
     void run();
     void generation_step();
     void calc_std();
+    void calc_viability();
 };
