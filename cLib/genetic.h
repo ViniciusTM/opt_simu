@@ -59,5 +59,12 @@ class Genetic
     void run();
     void generation_step();
     void calc_std();
+<<<<<<< HEAD
     void calc_viability();
+=======
+    bool x1(Solution&, Solution&);
+    std::vector<Solution> tournament();
+    void reproduction();
+    void armagedon();
+>>>>>>> 8fa69458f636f377e047c585c1fff5e1a6841cc8
 };
