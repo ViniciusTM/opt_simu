@@ -108,7 +108,7 @@ void Genetic::run()
     auto start = std::chrono::high_resolution_clock::now();
     while (popStd > hp.stdTreshold || genNumber < hp.itTreshold || elapsed < hp.timeTreshold)
     {
-        int simuNum = Solution::totalSimuNumber;
+        int simuNum = Solution::tabu.length;
         std::cout << "=======================================" << std::endl;
         std::cout << "-----> Generation: " << genNumber << std::endl;
         generation_step();

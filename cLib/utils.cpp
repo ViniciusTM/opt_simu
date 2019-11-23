@@ -23,20 +23,26 @@ TabuList::TabuList() {
 
 TabuList::~TabuList() {
     clear();
+    root->children.clear();
+    delete root;
 }
 
 void TabuList::clear() {
-    resursive_clear(root);
-    successes = 0;
-    length = 0;
+    for (Node* n : root->children) {
+        if (n != NULL) {
+            n == NULL;
+        }
+    }
 }
 
-void TabuList::resursive_clear(Node *node) {
+void TabuList::recursive_clear(Node *node) {
     if (node != NULL) {
         for (Node* n : node->children) {
-            resursive_clear(n);
+            recursive_clear(n);
         }
+        node->children.clear();
         delete node;
+        node = NULL;
     }
 }
 
@@ -48,17 +54,17 @@ Node* TabuList::find(Params params) {
         return NULL;
     }
 
-    current = current->children[params.s -50];
+    current = current->children[params.s - 50];
     if (!current->children[params.d - 10]) {
         return NULL;
     }
 
-    current = current->children[params.d -10];
+    current = current->children[params.d - 10];
     if (!current->children[params.o - 1]) {
         return NULL;
     }
 
-    current = current->children[params.o -1];
+    current = current->children[params.o - 1];
     if (!current->children[params.l - 1]) {
         return NULL;
     }
@@ -76,17 +82,17 @@ void TabuList::add(Params params) {
         current->children[params.s - 50] = new Node(101);
     }
 
-    current = current->children[params.s -50];
+    current = current->children[params.s - 50];
     if (!current->children[params.d - 10]) {
         current->children[params.d - 10] = new Node(10);
     }
 
-    current = current->children[params.d -10];
+    current = current->children[params.d - 10];
     if (!current->children[params.o - 1]) {
         current->children[params.o - 1] = new Node(10);
     }
 
-    current = current->children[params.o -1];
+    current = current->children[params.o - 1];
     if (!current->children[params.l - 1]) {
         current->children[params.l - 1] = new Node(0);
     }

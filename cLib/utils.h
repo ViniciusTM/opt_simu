@@ -2,12 +2,14 @@
 
 #include <vector>
 #include <limits>
+#include <iostream>
 
 const double D_INF = std::numeric_limits<double>::infinity();
 const int I_INF = std::numeric_limits<int>::infinity();
 
 //------------ Params ------------//
-struct Params {
+struct Params
+{
     int s;      // estoque minimo
     int d;      // diferenca de estoque min e max
     int o;      // tipo de ordem
@@ -45,10 +47,11 @@ struct Node {
 
 class TabuList {
     private:
-    Node *root;
-    void resursive_clear(Node*);
+    
+    void recursive_clear(Node*);
 
     public:
+    Node *root;
     int successes;
     int length;
 
