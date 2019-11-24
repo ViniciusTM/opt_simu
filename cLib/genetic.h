@@ -64,6 +64,7 @@ class Genetic
     bool x1(Solution&, Solution&);
     std::vector<Solution> tournament();
     void reproduction(std::vector<Solution>&);
+    void mutation(std::vector<Params>&);
     void armagedon(std::vector<Params>&);
     void report(double);
     void summary_print();

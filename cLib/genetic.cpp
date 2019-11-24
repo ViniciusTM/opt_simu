@@ -5,7 +5,7 @@
 #include <math.h>
 #include "genetic.h"
 
-double ALPHA = 0.0;
+double ALPHA = 1;
 
 //----------- Solution -----------//
 TabuList Solution::tabu;           // Lista Tabu como variavel de classe da solucao (evitar passa ela como parametro)
@@ -49,6 +49,7 @@ Params Solution::get_params()
     params.hc = holdingCost;
     params.sc = shortageCost;
     params.oc = orderCost;
+    params.ct = totalCost;
     params.inv = inviability;
 
     return params;
@@ -96,6 +97,7 @@ Genetic::Genetic(const char* fileName, bool report, HiperParams hipparams)
     genNumber = 0;
     Solution::tabu.clear();
     initial_pop(fileName);
+    bestSol.ct = D_INF;
 
     if (report) {
         reportFile.open("report.csv");
@@ -131,18 +133,20 @@ void Genetic::run()
 {
     auto start = std::chrono::high_resolution_clock::now();
     double elapsedGer = 0;
-    while (popStd > hp.stdTreshold || genNumber < hp.itTreshold || elapsed < hp.timeTreshold)
+    std::cout << "Valores: " << popStd << " " << genNumber << " " << elapsed << '\n';
+    std::cout << "Treshold: " << hp.stdTreshold << " " << hp.itTreshold << " " << hp.timeTreshold << '\n';
+    while (popStd < hp.stdTreshold && genNumber < hp.itTreshold && elapsed < hp.timeTreshold)
     {
         generation_step();
         std::chrono::duration<double> duration = std::chrono::high_resolution_clock::now() - start;
         elapsed = duration.count();
-        summary_print();
+        // summary_print();
 
         //CHAMAR FUNCAO PRINT AQUI
         elapsedGer = elapsed;
-        report(elapsedGer);
+        // report(elapsedGer);
+        genNumber++;
     }
-
     reportFile.close();
 }
 
@@ -155,10 +159,10 @@ void Genetic::generation_step()
     //foi o vencedor, sendo que caso seja necessario ira aplicar a simulacao para definir
     //esse ganhador. Ao final retornara um vetor com os vencedores e aptos a reproduzir
     winners = tournament();
-    for (int i = 0; i < winners.size(); i++)
-    {
-        std::cout << "Valor: " << winners[i].totalCost << '\n';
-    }
+    // for (int i = 0; i < winners.size(); i++)
+    // {
+    //     std::cout << "Valor: " << winners[i].totalCost << '\n';
+    // }
 
     //Funcao que, com base nos vencedores do torneio, ira definir quais serao os pais,
     //realizando a reproducao com base no alpha e aplicando a mutacao.
@@ -167,12 +171,13 @@ void Genetic::generation_step()
     //pais que foram selecionados, eliminando o restante
     // armagedon();
     std::cout << "Tempo: " << elapsed << std::endl;
+    std::cout << "Custo melhor FO: " << bestSol.ct << std::endl;
 }
 
 
 bool Genetic::x1(Solution& s1, Solution& s2)
 {
-    std::cout << "FO: : " << s1.totalCost << " " << s2.totalCost << '\n';
+    // std::cout << "FO: : " << s1.totalCost << " " << s2.totalCost << '\n';
     if (abs(s1.totalCost - s2.totalCost) <= hp.slackTreshold)
     {
         // std::cout << "Simulou!" << '\n';
@@ -193,13 +198,16 @@ std::vector<Solution> Genetic::tournament()
         bool m = x1(population[i], population[i+1]);
         if (m == 0) { winners.push_back(population[i]); }
         else { winners.push_back(population[i+1]); }
-        std::cout << "Valor winner: " << winners.back().totalCost << '\n';
+        // std::cout << "Valor winner: " << winners.back().totalCost << '\n';
     }
     return winners;
 }
 
 void Genetic::reproduction(std::vector<Solution>& winners)
 {
+    std::sort(population.begin(), population.end(), [](Solution& s1, Solution& s2){ return s1.totalCost < s2.totalCost; });
+    std::cout << "Melhor in: " << std::endl;
+    population[0].report();
     int sons = 0, survivors;
     std::vector<Params> newPopulation;
     newPopulation.reserve(hp.popSize);
@@ -215,36 +223,83 @@ void Genetic::reproduction(std::vector<Solution>& winners)
         Params son1, son2;
         double alpha = -0.1 + static_cast <float> (rand()) /( static_cast <float> (RAND_MAX/1.2));
         double deltaMinS = winners[fat1].sMin - winners[fat2].sMin;
-        son1.s = winners[fat1].sMin + alpha*deltaMinS;
-        son2.s = winners[fat2].sMin - alpha*deltaMinS;
+        // std::cout << "deltaMin: " << deltaMinS << '\n';
+        son1.s = winners[fat1].sMin - alpha*deltaMinS;
+        son2.s = winners[fat2].sMin + alpha*deltaMinS;
         double deltaDiff = winners[fat1].sDiff - winners[fat2].sDiff;
-        son1.d = winners[fat1].sDiff + alpha*deltaDiff;
-        son2.d = winners[fat2].sDiff - alpha*deltaDiff;
+        son1.d = winners[fat1].sDiff - alpha*deltaDiff;
+        son2.d = winners[fat2].sDiff + alpha*deltaDiff;
         double deltaOrderType = winners[fat1].orderType - winners[fat2].orderType;
-        son1.o = winners[fat1].orderType + alpha*deltaOrderType;
-        son2.o = winners[fat2].orderType - alpha*deltaOrderType;
+        son1.o = winners[fat1].orderType - alpha*deltaOrderType;
+        son2.o = winners[fat2].orderType + alpha*deltaOrderType;
         double deltaDeliveryType = winners[fat1].deliveryType - winners[fat2].deliveryType;
-        son1.l = winners[fat1].deliveryType + alpha*deltaDeliveryType;
-        son2.l = winners[fat2].deliveryType - alpha*deltaDeliveryType;
+        son1.l = winners[fat1].deliveryType - alpha*deltaDeliveryType;
+        son2.l = winners[fat2].deliveryType + alpha*deltaDeliveryType;
         newPopulation.push_back(son1);
         sons++;
         if (sons > childrenNumber) { break; }
         newPopulation.push_back(son2);
         sons++;
     }
-    std::sort(population.begin(), population.end(), [](Solution& s1, Solution& s2){ return s1.totalCost > s2.totalCost; });
+    mutation(newPopulation);
+    std::sort(population.begin(), population.end(), [](Solution& s1, Solution& s2){ return s1.totalCost < s2.totalCost; });
+    // std::cout << "Melhor in: " << std::endl;
+    // population[0].report();
+    if (population[0].totalCost < bestSol.ct) { bestSol = population[0].get_params(); }
     int i = 0;
-    while(newPopulation.size() < hp.popSize)
+    while(i < hp.popSize - childrenNumber)
     {
         Params son = population[i].get_params();
+        population[i].report();
+        newPopulation.push_back(son);
         i++;
     }
     armagedon(newPopulation);
+    for (Solution sol : population) { sol.report(); }
 }
 
-void Genetic::armagedon(std::vector<Params>& newPopulation)
+void Genetic::mutation(std::vector<Params>& newPop)
 {
-    
+    for (int i = 0; i < newPop.size(); i++)
+    {
+        double t_mut = 0.1;
+        // std::cout << "RAND: " << (double)std::rand()/RAND_MAX << '\n';
+        if ((double) std::rand()/RAND_MAX <= t_mut)
+        {
+            std::cout << "Mutou" << '\n';
+            newPop[i].s = rand()%250 + 50;
+        }
+        if ((double) std::rand()/RAND_MAX <= t_mut)
+        {
+            std::cout << "Mutou" << '\n';
+            newPop[i].d = rand()%110 + 10;
+        }
+        if ((double) std::rand()/RAND_MAX <= t_mut)
+        {
+            std::cout << "Mutou" << '\n';
+            newPop[i].o = rand()%10 + 1;
+        }
+        if ((double) std::rand()/RAND_MAX <= t_mut)
+        {
+            std::cout << "Mutou" << '\n';
+            newPop[i].l = rand()%10 + 1;
+        }
+    }
+}
+
+void Genetic::armagedon(std::vector<Params>& newPop)
+{
+    population.clear();
+    for(Params p : newPop)
+    {
+        int s = std::max(std::min(250, p.s), 50);
+        int d = std::max(std::min(110, p.d), 10);
+        int o = std::max(std::min(10, p.o), 1);
+        int l = std::max(std::min(10, p.l), 1);
+
+        Solution sol(s, d, o, l);
+        population.push_back(sol);
+    }
 }
 
 // Calcula a variabilidade da populacao
