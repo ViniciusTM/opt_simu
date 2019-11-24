@@ -63,8 +63,8 @@ class Genetic
     int calc_viability();
     bool x1(Solution&, Solution&);
     std::vector<Solution> tournament();
-    void reproduction();
-    void armagedon();
+    void reproduction(std::vector<Solution>&);
+    void armagedon(std::vector<Params>&);
     void report(double);
     void summary_print();
 };
