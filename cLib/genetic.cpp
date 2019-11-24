@@ -102,7 +102,7 @@ Genetic::Genetic(const char* fileName, bool report, HiperParams hipparams)
         if (!reportFile.is_open()) {
             std::cout << "Erro ao abrir report file" << std::endl;
         }
-        reportFile << "length;elapsed;holdingCost;shortageCost;orderCost;popStd;viability" << std::endl; 
+        reportFile << "length;elapsed;holdingCost;shortageCost;orderCost;popStd;viability" << std::endl;
     }
 }
 
@@ -199,6 +199,21 @@ std::vector<Solution> Genetic::tournament()
     return winners;
 }
 
+void Genetic::build_population(std::vector<Params>& newPop)
+{
+    population.clear();
+    for(Params p : newPop)
+    {
+        int s = std::max(std::min(250, p.s), 50);
+        int d = std::max(std::min(110, p.d), 10);
+        int o = std::max(std::min(10, p.o), 1);
+        int l = std::max(std::min(10, p.l), 1);
+
+        Solution sol(s, d, o, l);
+        population.push_back(sol);
+    }
+}
+
 
 // Calcula a variabilidade da populacao
 void Genetic::calc_std()
@@ -243,12 +258,12 @@ void Genetic::summary_print() {
     std::cout << "Std da Posulação: " << popStd << std::endl;
     std::cout << "Numero de viaveis: " << calc_viability() << std::endl;
     std::cout << "Melhor solução: sMin = " << bestSol.s << " sDiff = " << bestSol.d;
-    std::cout << " orderType = " << bestSol.o << " deliveryType = " << bestSol.l << std::endl; 
+    std::cout << " orderType = " << bestSol.o << " deliveryType = " << bestSol.l << std::endl;
     std::cout << std::endl;
 }
 
 void Genetic::report(double elapsedGer)
-{ 
+{
     if (reportFile.is_open())
     {
         reportFile << Solution::tabu.length << ";"; //numero simulacoes
