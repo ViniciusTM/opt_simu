@@ -191,32 +191,33 @@ bool Genetic::x1(Solution& s1, Solution& s2)
 std::vector<Solution> Genetic::tournament()
 {
     std::vector<Solution> winners;
-    winners.reserve(population.size()/2);
-    std::random_shuffle(population.begin(), population.end());
-    for (int i = 0; i < population.size() - 1; i+=2)
+    winners.reserve(population.size());
+    for (int i = 0; i < population.size(); i++)
     {
-        bool m = x1(population[i], population[i+1]);
-        if (m == 0) { winners.push_back(population[i]); }
-        else { winners.push_back(population[i+1]); }
-        // std::cout << "Valor winner: " << winners.back().totalCost << '\n';
+        int pos1 = std::rand()%population.size();
+        int pos2 = std::rand()%population.size();
+        if (pos1 == pos2) { pos2 = (pos2+1)%population.size(); }
+        bool m = x1(population[pos1], population[pos2]);
+        if (m == 0) { winners.push_back(population[pos1]); }
+        else { winners.push_back(population[pos2]); }
+        std::cout << "Valor winner: " << winners.back().totalCost << '\n';
     }
     return winners;
 }
 
 void Genetic::reproduction(std::vector<Solution>& winners)
 {
-    std::sort(population.begin(), population.end(), [](Solution& s1, Solution& s2){ return s1.totalCost < s2.totalCost; });
-    std::cout << "Melhor in: " << std::endl;
-    population[0].report();
     int sons = 0, survivors;
     std::vector<Params> newPopulation;
     newPopulation.reserve(hp.popSize);
     int childrenNumber = population.size() - hp.elitism*population.size();
+    std::random_shuffle(winners.begin(), winners.end());
+    int i = 0;
     //Gera filhos ate que seja gerado um numero suficiente para a nova pop
     while (sons < childrenNumber)
     {
-        int fat1 = std::rand()%winners.size();
-        int fat2 = std::rand()%winners.size();
+        int fat1 = i;
+        int fat2 = i+1;
         //Para nao haver igual, pega o prox elemento do vetor e garante que nao vai estourar
         //o limite
         if (fat2 == fat1) { fat2 = (fat2 + 1)%winners.size(); }
@@ -240,13 +241,14 @@ void Genetic::reproduction(std::vector<Solution>& winners)
         if (sons > childrenNumber) { break; }
         newPopulation.push_back(son2);
         sons++;
+        i += 2;
     }
     mutation(newPopulation);
     std::sort(population.begin(), population.end(), [](Solution& s1, Solution& s2){ return s1.totalCost < s2.totalCost; });
     // std::cout << "Melhor in: " << std::endl;
     // population[0].report();
     if (population[0].totalCost < bestSol.ct) { bestSol = population[0].get_params(); }
-    int i = 0;
+    i = 0;
     while(i < hp.popSize - childrenNumber)
     {
         Params son = population[i].get_params();
@@ -262,7 +264,7 @@ void Genetic::mutation(std::vector<Params>& newPop)
 {
     for (int i = 0; i < newPop.size(); i++)
     {
-        double t_mut = 0.1;
+        double t_mut = 0.01;
         // std::cout << "RAND: " << (double)std::rand()/RAND_MAX << '\n';
         if ((double) std::rand()/RAND_MAX <= t_mut)
         {
