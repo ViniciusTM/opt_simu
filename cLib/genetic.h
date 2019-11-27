@@ -9,10 +9,10 @@ const int SIMU_TIME = 100;
 // ------------- Solution ------------- //
 class Solution
 {
-    private:
+private:
     void metamodel();
 
-    public:
+public:
     static TabuList tabu;
     static int totalSimuNumber;
 
@@ -34,13 +34,13 @@ class Solution
     Params get_params();
     void report();
     void simulate();
+    void arena();
 };
-
 
 // ------------- Genetic ------------- //
 class Genetic
 {
-    private:
+private:
     int genNumber;
     std::ofstream reportFile;
 
@@ -51,21 +51,21 @@ class Genetic
     std::vector<Solution> population;
     double popStd;
 
-    public:
+public:
     Params bestSol;
 
-    Genetic(const char*, bool = false, HiperParams = HiperParams());
+    Genetic(const char *, bool = false, HiperParams = HiperParams());
 
-    void initial_pop(const char*);
+    void initial_pop(const char *);
     void run();
     void generation_step();
     void calc_std();
     int calc_viability();
-    bool x1(Solution&, Solution&);
+    bool x1(Solution &, Solution &);
     std::vector<Solution> tournament();
-    void reproduction(std::vector<Solution>&);
-    void mutation(std::vector<Params>&);
-    void armagedon(std::vector<Params>&);
+    void reproduction(std::vector<Solution> &);
+    void mutation(std::vector<Params> &);
+    void armagedon(std::vector<Params> &);
     void report(double);
     void summary_print();
 };
