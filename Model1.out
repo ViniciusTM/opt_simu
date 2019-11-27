@@ -1,0 +1,74 @@
+SIMAN Run Controller.
+
+0.0 Hours>SIMAN Run Controller.
+
+7978.9753 Hours>
+                                      ARENA Simulation Results
+                                    Rafael - License: 7328734345
+
+                                  Summary for Replication 1 of 1
+
+Project: Unnamed Project                                             Run execution date :11/26/2019
+Analyst: vinicius.t.mello.1@gmail.com                                Model revision date:11/26/2019
+
+Replication ended at time      : 8760.0 Hours 
+Base Time Units: Hours
+
+                                           TALLY VARIABLES
+
+Identifier                                  Average   Half Width  Minimum    Maximum   Observations
+___________________________________________________________________________________________________
+
+CONFIG.VATime                               .00000     (Insuf)    .00000     .00000          1    
+CONFIG.NVATime                              .00000     (Insuf)    .00000     .00000          1    
+CONFIG.WaitTime                             .00000     (Insuf)    .00000     .00000          1    
+CONFIG.TranTime                             .00000     (Insuf)    .00000     .00000          1    
+CONFIG.OtherTime                            .00000     (Insuf)    .00000     .00000          1    
+CONFIG.TotalTime                            .00000     (Insuf)    .00000     .00000          1    
+CHECAGEM.VATime                             102.63     (Insuf)    96.561     107.79         52    
+CHECAGEM.NVATime                            .00000     (Insuf)    .00000     .00000         52    
+CHECAGEM.WaitTime                           .00000     (Insuf)    .00000     .00000         52    
+CHECAGEM.TranTime                           .00000     (Insuf)    .00000     .00000         52    
+CHECAGEM.OtherTime                          .00000     (Insuf)    .00000     .00000         52    
+CHECAGEM.TotalTime                          102.63     (Insuf)    96.561     107.79         52    
+CLIENTE.VATime                              .00000     .00000     .00000     .00000       3720    
+CLIENTE.NVATime                             .00000     .00000     .00000     .00000       3720    
+CLIENTE.WaitTime                            .00000     .00000     .00000     .00000       3720    
+CLIENTE.TranTime                            .00000     .00000     .00000     .00000       3720    
+CLIENTE.OtherTime                           .00000     .00000     .00000     .00000       3720    
+CLIENTE.TotalTime                           .00000     .00000     .00000     .00000       3720    
+RESULTADOS.VATime                           .00000     (Insuf)    .00000     .00000          1    
+RESULTADOS.NVATime                          .00000     (Insuf)    .00000     .00000          1    
+RESULTADOS.WaitTime                         .00000     (Insuf)    .00000     .00000          1    
+RESULTADOS.TranTime                         .00000     (Insuf)    .00000     .00000          1    
+RESULTADOS.OtherTime                        .00000     (Insuf)    .00000     .00000          1    
+RESULTADOS.TotalTime                        .00000     (Insuf)    .00000     .00000          1    
+
+                                     DISCRETE-CHANGE VARIABLES
+
+Identifier                                  Average   Half Width  Minimum    Maximum   Final Value
+___________________________________________________________________________________________________
+
+CONFIG.WIP                                  .00000     (Insuf)    .00000     1.0000     .00000    
+CHECAGEM.WIP                                .61200     (Insuf)    .00000     1.0000     1.0000    
+CLIENTE.WIP                                 .00000     (Insuf)    .00000     1.0000     .00000    
+RESULTADOS.WIP                              .00000     (Insuf)    .00000     1.0000     .00000    
+
+                                             OUTPUTS
+
+Identifier                                   Value
+_____________________________________________________________
+
+CONFIG.NumberIn                             1.0000    
+CONFIG.NumberOut                            1.0000    
+CHECAGEM.NumberIn                           53.000    
+CHECAGEM.NumberOut                          52.000    
+CLIENTE.NumberIn                            3720.0    
+CLIENTE.NumberOut                           3720.0    
+RESULTADOS.NumberIn                         1.0000    
+RESULTADOS.NumberOut                        1.0000    
+System.NumberOut                            3774.0    
+
+
+Simulation run time: 0.05 minutes.
+Simulation run complete.

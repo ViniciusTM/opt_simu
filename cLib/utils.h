@@ -30,7 +30,7 @@ struct HiperParams
     double slackTreshold;
     double elitism;
 
-    HiperParams(double = D_INF, int = RAND_MAX, double = 3, double = 5, double = 0.1);
+    HiperParams(double = D_INF, int = RAND_MAX, double = 3, double = 0, double = 0.1);
 };
 
 // ------------- Tabu List ------------- //
