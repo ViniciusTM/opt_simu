@@ -80,7 +80,7 @@ void Solution::simulate()
     simulated = true;
 
     // ======= simulação =======
-    metamodel();
+    arena();
     // =========================
 
     totalSimuNumber++;
