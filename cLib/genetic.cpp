@@ -94,6 +94,7 @@ Genetic::Genetic(const char* fileName, bool report, HiperParams hipparams)
 {
     Solution::totalSimuNumber = 0;
     hp = hipparams;
+    popStd = RAND_MAX;
     genNumber = 0;
     Solution::tabu.clear();
     initial_pop(fileName);
@@ -135,16 +136,17 @@ void Genetic::run()
     double elapsedGer = 0;
     std::cout << "Valores: " << popStd << " " << genNumber << " " << elapsed << '\n';
     std::cout << "Treshold: " << hp.stdTreshold << " " << hp.itTreshold << " " << hp.timeTreshold << '\n';
-    while (popStd < hp.stdTreshold && genNumber < hp.itTreshold && elapsed < hp.timeTreshold)
+    while (popStd > hp.stdTreshold && genNumber < hp.itTreshold && elapsed < hp.timeTreshold)
     {
         generation_step();
+        calc_std();
         std::chrono::duration<double> duration = std::chrono::high_resolution_clock::now() - start;
         elapsed = duration.count();
-        // summary_print();
+        summary_print();
 
         //CHAMAR FUNCAO PRINT AQUI
         elapsedGer = elapsed;
-        // report(elapsedGer);
+        report(elapsedGer);
         genNumber++;
     }
     reportFile.close();
@@ -200,7 +202,7 @@ std::vector<Solution> Genetic::tournament()
         bool m = x1(population[pos1], population[pos2]);
         if (m == 0) { winners.push_back(population[pos1]); }
         else { winners.push_back(population[pos2]); }
-        std::cout << "Valor winner: " << winners.back().totalCost << '\n';
+        // std::cout << "Valor winner: " << winners.back().totalCost << '\n';
     }
     return winners;
 }
@@ -315,13 +317,13 @@ void Genetic::calc_std()
         soma += population[i].totalCost;
     }
 
-    double average = soma/(hp.popSize-1);
+    double average = soma/(hp.popSize);
 
     for(int i=0; i<hp.popSize; i++)
     {
         soma += pow(population[i].totalCost-average, 2);
     }
-
+    soma /= (hp.popSize-1);
     popStd = sqrt(soma);
 }
 
